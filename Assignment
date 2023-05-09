@@ -1,0 +1,57 @@
+Que)Design a Data Warehouse for IPL Cricket Tournament?
+
+Fact Tables:
+Matches (match_id, venue_id, date, winner_id, player_of_match_id, umpire1_id, umpire2_id, season_id, team1_id, team2_id, win_by_runs, win_by_wickets, toss_winner_id, toss_decision)
+Deliveries (delivery_id, match_id, inning, batting_team_id, bowling_team_id, over, ball, batsman_id, non_striker_id, bowler_id, is_wide, is_no, is_legbye, is_batting_team_wicket, is_other_wicket, batsman_runs, extra_runs, total_runs, player_dismissed_id, dismissal_kind_id, fielder_id)
+
+
+Dimension Tables:
+Venues (venue_id, name, city, country)
+Players (player_id, name, dob, country)
+Umpires (umpire_id, name, country)
+Teams (team_id, name, city, home_venue_id, coach_id, captain_id)
+Seasons (season_id, year)
+
+
+Primary Keys:
+Matches: match_id
+Deliveries: delivery_id
+Venues: venue_id
+Players: player_id
+Umpires: umpire_id
+Teams: team_id
+Seasons: season_id
+
+Foreign Keys:
+Matches: venue_id references Venues(venue_id)
+Matches: winner_id references Teams(team_id)
+Matches: player_of_match_id references Players(player_id)
+Matches: umpire1_id references Umpires(umpire_id)
+Matches: umpire2_id references Umpires(umpire_id)
+Matches: season_id references Seasons(season_id)
+Matches: team1_id references Teams(team_id)
+Matches: team2_id references Teams(team_id)
+Matches: toss_winner_id references Teams(team_id)
+Matches: toss_decision references some domain table
+Deliveries: match_id references Matches(match_id)
+Deliveries: batting_team_id references Teams(team_id)
+Deliveries: bowling_team_id references Teams(team_id)
+Deliveries: batsman_id references Players(player_id)
+Deliveries: non_striker_id references Players(player_id)
+Deliveries: bowler_id references Players(player_id)
+Deliveries: player_dismissed_id references Players(player_id)
+Deliveries: dismissal_kind_id references some domain table
+Deliveries: fielder_id references Players(player_id)
+
+Star Schema Design.
+
+Example SQL queries:
+
+Total number of matches played in a season
+SELECT COUNT(*) FROM Matches WHERE season_id = <season_id>;
+Total runs scored by a team in a match
+SELECT SUM(total_runs) FROM Deliveries WHERE match_id = <match_id> AND batting_team_id = <team_id>;
+Total wickets taken by a bowler in a season
+SELECT COUNT(*) FROM Deliveries WHERE bowler_id = <bowler_id> AND dismissal_kind_id IS NOT NULL AND match_id IN (SELECT match_id FROM Matches WHERE season_id = <season_id>);
+Top 5 players with the highest batting average in a season
+SELECT Players.name, AVG(Deliveries.batsman_runs) FROM Players JOIN Deliveries ON Players.player_id = Deliveries.batsman_id WHERE Deliveries.match_id IN (SELECT match_id FROM Matches WHERE season_id = <season_id>) AND Deliveries.batsman_runs > 0 GROUP BY Players.player_id ORDER BY AVG(Deliveries.batsman_runs) DESC LIMIT 5;
