@@ -1,0 +1,49 @@
+To design a data warehouse for a restaurant table booking app like Dineout, we can follow the steps below:
+
+Identify the Business Process:
+The business process of the restaurant table booking app involves the following steps:
+A customer searches for a restaurant based on their preferences.
+The customer selects a restaurant and books a table.
+The restaurant confirms the booking and assigns a table to the customer.
+The customer visits the restaurant and occupies the table.
+The customer pays the bill and leaves the restaurant.
+
+
+Identify the Dimensions:
+The dimensions of the data warehouse will include the following:
+Date dimension: The date of the booking, the date of the visit, and the date of the bill payment.
+Customer dimension: The details of the customer, such as name, contact information, and location.
+Restaurant dimension: The details of the restaurant, such as name, location, and cuisine type.
+Table dimension: The details of the table, such as table number, seating capacity, and location in the restaurant.
+Payment dimension: The details of the payment, such as payment mode and amount.
+
+
+Identify the Fact Tables:
+The fact tables will capture the events that occur during the business process, such as:
+Booking fact table: This will capture the details of the booking, such as the booking ID, the date of the booking, the customer ID, the restaurant ID, and the table ID.
+Visit fact table: This will capture the details of the visit, such as the visit ID, the date of the visit, the customer ID, the restaurant ID, the table ID, and the status of the visit (occupied or not).
+Payment fact table: This will capture the details of the payment, such as the payment ID, the date of the payment, the customer ID, the restaurant ID, the table ID, and the amount paid.
+
+
+Create Primary and Foreign Keys:
+To create meaningful primary and foreign keys, we can use the following approach:
+Each dimension table will have a primary key that uniquely identifies each record.
+The fact tables will have foreign keys that link to the primary keys of the related dimension tables.
+
+
+Schema Design:
+We can follow a star schema design for the data warehouse, where each fact table is linked to multiple dimension tables. The schema will look like the following:
+Booking fact table links to customer, restaurant, table, and date dimension tables.
+Visit fact table links to customer, restaurant, table, and date dimension tables.
+Payment fact table links to customer, restaurant, table, payment, and date dimension tables.
+
+
+SQL Queries:
+Some of the insightful business metrics that we can generate using SQL queries are:
+Total number of bookings by restaurant and date
+Total number of visits by restaurant and date
+Average time between booking and visit
+Average time between visit and payment
+Total revenue by restaurant and date
+Average revenue per visit by restaurant and date
+These queries will help the restaurant table booking app to understand the business performance and make data-driven decisions.
