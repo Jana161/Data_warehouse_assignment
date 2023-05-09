@@ -1,0 +1,68 @@
+To design a data warehouse for a cab ride service like Uber or Lyft, we will follow the following steps:
+
+Identify the Business Requirements:
+a. Daily trips
+b. Drivers and their ratings
+c. Payment details
+d. Trip details (pickup and drop location, time, fare, etc.)
+e. User details
+f. Promotion details
+
+Design Fact & Dimension Tables:
+a. Fact Table: This table will contain all the transactions or events that have occurred, such as cab rides. In this case, the fact table would be the trip details table that would include the following columns:
+
+trip_id (primary key)
+user_id (foreign key to user dimension table)
+driver_id (foreign key to driver dimension table)
+pickup_location_id (foreign key to location dimension table)
+drop_location_id (foreign key to location dimension table)
+trip_date
+trip_time
+fare
+payment_method_id (foreign key to payment dimension table)
+promotion_id (foreign key to promotion dimension table)
+
+b. Dimension Tables: These tables will contain descriptive information about the fact table. In this case, the dimension tables would be:
+User Dimension Table: This table will include information about users like user_id, name, email, phone, etc.
+Driver Dimension Table: This table will include information about drivers like driver_id, name, phone, rating, etc.
+Location Dimension Table: This table will include information about locations like location_id, name, address, latitude, longitude, etc.
+Payment Dimension Table: This table will include information about payment methods like payment_method_id, payment_method_name, etc.
+Promotion Dimension Table: This table will include information about promotions like promotion_id, promotion_name, promotion_code, etc.
+
+Create Primary & Foreign Keys:
+a. Primary keys:
+
+trip_id in the fact table
+user_id in the user dimension table
+driver_id in the driver dimension table
+location_id in the location dimension table
+payment_method_id in the payment dimension table
+promotion_id in the promotion dimension table
+b. Foreign keys:
+user_id in the fact table referencing user_id in the user dimension table
+driver_id in the fact table referencing driver_id in the driver dimension table
+pickup_location_id in the fact table referencing location_id in the location dimension table
+drop_location_id in the fact table referencing location_id in the location dimension table
+payment_method_id in the fact table referencing payment_method_id in the payment dimension table
+promotion_id in the fact table referencing promotion_id in the promotion dimension table
+Star/SnowFlake Schema Design:
+We will follow the Star Schema design for this data warehouse. The fact table will be at the center, and all the dimension tables will be connected to it.
+
+SQL Queries for Insightful Business Metrics:
+a. Total trips in a day:
+SELECT COUNT(trip_id) as total_trips, trip_date
+FROM trip_details
+GROUP BY trip_date;
+b. Average fare per trip for each driver:
+SELECT AVG(fare) as avg_fare, driver_id
+FROM trip_details
+GROUP BY driver_id;
+c. Top 10 users by number of trips:
+SELECT COUNT(trip_id) as total_trips, user_id
+FROM trip_details
+GROUP BY user_id
+ORDER BY total_trips DESC
+LIMIT 10;
+d. Average rating for each driver:
+SELECT AVG(rating) as avg_rating, driver_id
+FROM driver
