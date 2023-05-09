@@ -1,0 +1,49 @@
+To design a data warehouse for Covid Vaccination Application, we need to first identify the key entities and their relationships. Here are some possible fact and dimension tables for the given scenario:
+
+Fact Table:
+Vaccination Fact Table: This table would contain the details of vaccinations given to individuals. The key fields would be the date of vaccination, the vaccine type, the number of doses, the vaccination location, and the individual ID. Other fields could include the healthcare provider, the batch number of the vaccine, and any adverse reactions reported.
+Dimension Tables:
+
+Date Dimension: This table would contain information about the dates on which vaccinations were given. The key fields would include the date, month, year, day of the week, and any relevant public holidays.
+Vaccine Dimension: This table would contain information about the various types of vaccines available. The key fields would be the vaccine name, manufacturer, and dosage schedule.
+Location Dimension: This table would contain information about the various vaccination locations, such as hospitals, clinics, and mobile units. The key fields would include the location name, address, and contact information.
+
+Primary and Foreign Keys:
+The primary key for the Vaccination Fact Table would be a composite key consisting of the date of vaccination, vaccine type, number of doses, vaccination location, and individual ID.
+The primary keys for the Date, Vaccine, and Location dimensions would be their respective ID fields.
+The foreign keys in the Vaccination Fact Table would link to the ID fields in the Date, Vaccine, and Location dimensions.
+
+Schema Design:
+Star Schema: The Vaccination Fact Table would be at the center of the schema, with the Date, Vaccine, and Location dimensions radiating out from it.
+
+
+SQL Queries:
+
+Total number of vaccinations administered by location:
+
+
+SELECT l.location_name, SUM(vf.num_doses)
+FROM vaccination_fact vf
+JOIN location_dim l ON vf.location_id = l.location_id
+GROUP BY l.location_name;
+
+Number of vaccinations administered by vaccine type:
+SELECT v.vaccine_name, COUNT(*)
+FROM vaccination_fact vf
+JOIN vaccine_dim v ON vf.vaccine_id = v.vaccine_id
+GROUP BY v.vaccine_name;
+
+Vaccination rate by day of the week:
+SELECT d.day_of_week, COUNT(*)
+FROM vaccination_fact vf
+JOIN date_dim d ON vf.date_id = d.date_id
+GROUP BY d.day_of_week;
+
+Average number of doses per vaccination:
+SELECT AVG(num_doses)
+FROM vaccination_fact;
+
+Total number of vaccinations administered by healthcare provider:
+SELECT healthcare_provider, COUNT(*)
+FROM vaccination_fact
+GROUP BY healthcare_provider;
