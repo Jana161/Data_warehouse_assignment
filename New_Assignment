@@ -1,0 +1,57 @@
+Question 1: What are the strengths and weaknesses of each option?
+
+Option A:
+
+Strengths: Retains the original fact table grain. Provides the most straightforward representation of instructors.
+Weaknesses: May not handle multiple instructors well, as it combines them into a single "team" row.
+Option B:
+
+Strengths: Handles multiple instructors by allocating enrollments equally. Preserves the original fact table grain.
+Weaknesses: Requires fractional enrollment counts, which can be less intuitive.
+Option C:
+
+Strengths: Separates the fact tables based on the need for instructor information. Provides clean data segregation.
+Weaknesses: Requires users to choose the appropriate fact table based on their query, which can be complex.
+Question 2: Which option would you choose and why?
+
+I would choose Option C. It offers clear data segregation by separating the fact tables, ensuring that the Instructor dimension can be included without compromising the grain. This approach provides flexibility for users, allowing them to choose the appropriate fact table for their queries. While it requires managing two fact tables, it provides a clean and understandable design.
+
+Question 3: Would your answer to Question 2 be different if the majority of classes had multiple instructors? How about if only one or two classes had multiple instructors?
+
+If the majority of classes had multiple instructors, Option B might be more suitable due to its ability to handle multiple instructors efficiently. However, if only one or two classes had multiple instructors, Option C would still be preferable for its clean data separation and flexibility.
+
+Question 4: [OPTIONAL] Can you think of another reasonable alternative design besides Options A, B, and C?
+
+An alternative design could involve denormalizing the Instructor dimension by creating a separate fact table for multi-instructor courses. In this table, each row represents a student enrollment with multiple instructors listed as a comma-separated string or an array. While this approach simplifies the schema, it might make certain queries more challenging, especially those involving individual instructors.
+
+Scenario II: Data Warehouse for an Online Brokerage Company
+
+Question 5: What are the strengths and weaknesses of each option?
+
+Option A:
+
+Strengths: Simplicity, minimal storage overhead for scores as Customer dimension attributes.
+Weaknesses: Overwrites old scores (Type 1 SCD), which may not capture historical changes.
+Option B:
+
+Strengths: Captures historical changes in scores (Type 2 SCD), providing a comprehensive view of customer evolution.
+Weaknesses: Increases storage due to duplicate customer records with different scores.
+Option C:
+
+Strengths: Scores are stored in a separate dimension, ensuring efficient filtering and grouping.
+Weaknesses: Requires a foreign key reference in the fact table, which could lead to more complex queries.
+Option D:
+
+Strengths: Scores are stored in an outrigger table. Customer dimension retains simplicity.
+Weaknesses: Increases complexity due to foreign key updates when scores change.
+Question 6: Which option would you choose and why?
+
+I would choose Option B (Type 2 Slowly Changing Dimension). It captures historical changes in customer scores, providing a comprehensive view of customer behavior over time. While it increases storage due to duplicate customer records, it offers a valuable historical perspective that can aid analysis.
+
+Question 7: Would your answer to Question 6 be different if the number of customers and/or the time interval between score recalculations was much larger or much smaller?
+
+If the number of customers was significantly larger or the time interval between score recalculations much smaller, Option B could become less practical due to increased storage requirements. In such cases, Option A (Type 1 SCD) might be more suitable as it would reduce storage overhead. The choice would depend on the trade-off between historical accuracy and storage costs.
+
+Question 8: [OPTIONAL] Can you think of another reasonable alternative design besides Options A, B, C, and D?
+
+An alternative design could involve a hybrid approach where scores are attributes of the Customer dimension (Option A) but are also tracked historically in a separate score change log table. This log table would store score changes with timestamps, allowing users to analyze historical trends while keeping the Customer dimension simple. This approach strikes a balance between simplicity and historical accuracy.
